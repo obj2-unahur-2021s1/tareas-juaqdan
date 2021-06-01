@@ -1,7 +1,11 @@
-// Pueden usar este archivo para hacer pruebas rápidas,
-// de la misma forma en que usaban el REPL de Wollok.
+import ar.edu.unahur.obj2.tareas.Empleado
+import ar.edu.unahur.obj2.tareas.Tarea
 
-// OJO: lo que esté aquí no será tenido en cuenta
-// en la corrección ni reemplaza a los tests.
+val empleado1 = Empleado(200.0)
+val responsable = Empleado(300.0)
 
-listOf(1, 8, 10).average()
+val tarea1 = Tarea(8, responsable, 3000.0)
+tarea1.empleados.add(empleado1)
+tarea1.nomina()
+tarea1.costoTotal()
+tarea1.costoDeEmpleados()
