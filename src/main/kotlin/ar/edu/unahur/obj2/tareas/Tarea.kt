@@ -10,9 +10,30 @@ class Tarea(val horasEstimadas: Int, val responsable: Empleado, val costoDeInfra
 
     fun costoDeEmpleados() = empleados.sumByDouble { it.cobroPorHora * horasNecesarias() }
     fun costoDeResponsable() = responsable.cobroPorHora * horasNecesarias()
-    fun costoTotal() = costoDeInfrastructura + costoDeEmpleados() + costoDeResponsable()
+    fun costoTotal() = costoDeEmpleados() + costoDeResponsable() + costoDeInfrastructura
 
-    fun nomina() = empleados + responsable
+    fun nomina() = empleados + responsable//toSet()
+
+}
+
+class TareaDeIntegracion(val responsable: Empleado){
+    val subTareas = mutableListOf<Tarea>()
+
+    fun horasNecesarias() = totalHorasDeSubTareas() + horaPorCada8Horas()
+
+    fun horaPorCada8Horas() = (totalHorasDeSubTareas() / 8).toInt()
+
+    fun totalHorasDeSubTareas() = subTareas.sumBy { it.horasNecesarias() }
+
+    fun costoTotal() = costoTotalDeSubtareas() + bonusDelResponsable()
+
+    fun costoTotalDeSubtareas() = subTareas.sumByDouble { it.costoTotal() }
+
+    fun bonusDelResponsable() = costoTotalDeSubtareas() * 0.03
+
+    fun nomina() = nominasDeSubTareas() + responsable//.toSet()
+
+    fun nominasDeSubTareas() = subTareas.map { it.nomina() }
 }
 
 class Empleado(val cobroPorHora: Double) {
