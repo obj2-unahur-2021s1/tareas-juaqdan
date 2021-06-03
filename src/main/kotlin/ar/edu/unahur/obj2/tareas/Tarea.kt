@@ -3,37 +3,35 @@ package ar.edu.unahur.obj2.tareas
 
 import java.time.LocalTime
 
-class Tarea(val horasEstimadas: Int, val responsable: Empleado, val costoDeInfrastructura: Double) {
+open class Tarea(val horasEstimadas: Int, val responsable: Empleado, val costoDeInfrastructura: Double) {
     val empleados = mutableListOf<Empleado>()
 
-    fun horasNecesarias() = horasEstimadas / empleados.size
+    open fun horasNecesarias() = horasEstimadas / empleados.size
 
-    fun costoDeEmpleados() = empleados.sumByDouble { it.cobroPorHora * horasNecesarias() }
-    fun costoDeResponsable() = responsable.cobroPorHora * horasNecesarias()
-    fun costoTotal() = costoDeEmpleados() + costoDeResponsable() + costoDeInfrastructura
+    open fun costoDeEmpleados() = empleados.sumByDouble { it.cobroPorHora * horasNecesarias() }
+    open fun costoDeResponsable() = responsable.cobroPorHora * horasNecesarias()
+    open fun costoTotal() = costoDeEmpleados() + costoDeResponsable() + costoDeInfrastructura
 
-    fun nomina() = empleados + responsable//toSet()
+
+    open fun empleados() = empleados
+    open fun nomina() = empleados() + responsable
 
 }
 
-class TareaDeIntegracion(val responsable: Empleado){
+class TareaDeIntegracion(responsable: Empleado):Tarea(0, responsable, 0.0){
     val subTareas = mutableListOf<Tarea>()
 
-    fun horasNecesarias() = totalHorasDeSubTareas() + horaPorCada8Horas()
+    override fun horasNecesarias() = totalHorasDeSubTareas() + horaPorCada8Horas()
 
     fun horaPorCada8Horas() = (totalHorasDeSubTareas() / 8).toInt()
 
     fun totalHorasDeSubTareas() = subTareas.sumBy { it.horasNecesarias() }
 
-    fun costoTotal() = costoTotalDeSubtareas() + bonusDelResponsable()
+    override fun costoDeEmpleados() = subTareas.sumByDouble { it.costoTotal() }
 
-    fun costoTotalDeSubtareas() = subTareas.sumByDouble { it.costoTotal() }
+    override fun costoDeResponsable() = costoDeEmpleados() * 0.03
 
-    fun bonusDelResponsable() = costoTotalDeSubtareas() * 0.03
-
-    fun nomina() = nominasDeSubTareas() + responsable//.toSet()
-
-    fun nominasDeSubTareas() = subTareas.map { it.nomina() }
+    //override fun empleados() = subTareas.map { it.nomina() }.flatten()
 }
 
 class Empleado(val cobroPorHora: Double) {

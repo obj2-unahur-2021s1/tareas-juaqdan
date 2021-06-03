@@ -47,8 +47,9 @@ class TareaTest : DescribeSpec({
     it("costo total"){
       tareaIntegracion.costoTotal().shouldBe(85366.4)
     }
+    /*
     it("nomina"){
       tarea2.nomina().shouldBe(listOf(empleado1,empleado2,empleado3,empleado4,responsable2))
-    }
+    } */
   }
 })
