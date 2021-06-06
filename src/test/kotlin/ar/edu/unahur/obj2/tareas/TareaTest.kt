@@ -11,9 +11,10 @@ class TareaTest : DescribeSpec({
 
   val responsable = Empleado(200.0)
   val responsable2 = Empleado(800.00)
+  val responsable3 = Empleado(800.00)
 
-  val tarea1 = Tarea(8, responsable, 3000.0)
-  val tarea2 = Tarea( 20, responsable2, 70000.0)
+  val tarea1 = Tarea(8,  3000.0, responsable)
+  val tarea2 = Tarea( 20,  70000.0, responsable2)
 
   tarea1.empleados.addAll(listOf(empleado1,empleado2))
   tarea2.empleados.addAll(listOf(empleado1, empleado2, empleado3, empleado4))
@@ -36,8 +37,7 @@ class TareaTest : DescribeSpec({
   }
   describe("una tarea de integracion"){
 
-
-    val tareaIntegracion = TareaDeIntegracion(responsable2)
+    val tareaIntegracion = TareaDeIntegracion(responsable3)
 
     tareaIntegracion.subTareas.addAll(listOf(tarea1, tarea2))
 
@@ -47,9 +47,10 @@ class TareaTest : DescribeSpec({
     it("costo total"){
       tareaIntegracion.costoTotal().shouldBe(85366.4)
     }
-    /*
+
     it("nomina"){
-      tarea2.nomina().shouldBe(listOf(empleado1,empleado2,empleado3,empleado4,responsable2))
-    } */
+      tareaIntegracion.nomina().shouldBe(listOf(empleado1,empleado2,responsable,empleado1,empleado2,
+                                                empleado3,empleado4,responsable2,responsable3))
+    }
   }
 })
